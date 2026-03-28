@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/FitBuddy.iml" filepath="$PROJECT_DIR$/.idea/FitBuddy.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/activity-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/activity-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ai-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ai-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service.main.iml" />
     </modules>
   </component>
