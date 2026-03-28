@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fitbuddy-users
+    username: sarthaksolanki
+    password: sarthak
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    datasource-platform: org.hibernate.dialect.PostgreSQLDialect
