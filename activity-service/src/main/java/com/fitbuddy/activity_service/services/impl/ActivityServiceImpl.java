@@ -1,6 +1,7 @@
 package com.fitbuddy.activity_service.services.impl;
 
 import com.fitbuddy.activity_service.dtos.ActivityDto;
+import com.fitbuddy.activity_service.dtos.ActivityEvent;
 import com.fitbuddy.activity_service.dtos.ActivityRequest;
 import com.fitbuddy.activity_service.models.Activity;
 import com.fitbuddy.activity_service.repositories.ActivityRepository;
@@ -8,6 +9,8 @@ import com.fitbuddy.activity_service.services.ActivityService;
 import com.fitbuddy.activity_service.services.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +20,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
     private final UserValidationService userValidationService;
+    private final KafkaTemplate<String, ActivityEvent> kafkaTemplate;
+
+    @Value("${kafka.topic.name}")
+    private String kafkaTopic;
 
     @Override
     public ActivityDto trackActivity(ActivityRequest request) {
@@ -38,6 +45,22 @@ public class ActivityServiceImpl implements ActivityService {
                 .build();
 
         Activity savedActivity = activityRepository.save(activity);
+
+        try {
+            ActivityEvent event = ActivityEvent.builder()
+                    .activityId(savedActivity.getId())
+                    .userId(savedActivity.getUserId())
+                    .type(savedActivity.getType())
+                    .duration(savedActivity.getDuration())
+                    .caloriesBurned(savedActivity.getCaloriesBurned())
+                    .startTime(savedActivity.getStartTime())
+                    .additionalMatrics(savedActivity.getAdditionalMatrics())
+                    .createdAt(savedActivity.getCreatedAt())
+                    .build();
+            kafkaTemplate.send(kafkaTopic, event.getUserId(), event);
+        } catch (Exception e) {
+            log.error("Error sending kafka event for activityId: {}", savedActivity.getId());
+        }
 
         return convertToDto(savedActivity);
     }
