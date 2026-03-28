@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
         return convertToDto(user);
     }
 
+    @Override
+    public Boolean existsById(String id) {
+        return userRepository.existsById(id);
+    }
+
 
     private UserDto convertToDto(User user) {
         return UserDto.builder()

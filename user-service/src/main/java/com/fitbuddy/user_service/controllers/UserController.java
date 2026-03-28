@@ -35,7 +35,19 @@ public class UserController {
         ApiResponse<UserDto> response = ApiResponse.<UserDto>builder()
                 .success(true)
                 .data(userDto)
-                .error("User fetched successfully")
+                .message("User fetched successfully")
+                .error(null)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/validate")
+    public ResponseEntity<ApiResponse<Boolean>> validateUser(@PathVariable String id) {
+        Boolean isValidUser = userService.existsById(id);
+        ApiResponse<Boolean> response = ApiResponse.<Boolean>builder()
+                .success(true)
+                .data(isValidUser)
+                .message("User validated")
                 .error(null)
                 .build();
         return ResponseEntity.ok(response);

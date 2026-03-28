@@ -9,4 +9,6 @@ public interface UserService {
     UserDto registerUser(RegisterUserRequest request);
 
     UserDto getUserById(String id);
+
+    Boolean existsById(String id);
 }
