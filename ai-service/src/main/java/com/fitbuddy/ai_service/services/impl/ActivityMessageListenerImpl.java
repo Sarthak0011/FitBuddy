@@ -23,7 +23,11 @@ public class ActivityMessageListenerImpl implements ActivityMessageListener {
     public void processActivity(ActivityEvent activity) {
         log.info("Received an event for userId {}", activity.getUserId());
         Recommendation recommendation = activityAiService.generateRecommendation(activity);
-        recommendationRepository.save(recommendation);
-        log.info("Saved recommendation in DB");
+        if (recommendation != null) {
+            recommendationRepository.save(recommendation);
+            log.info("Saved recommendation in DB");
+        } else {
+            log.warn("Generated recommendation was null for userId {}", activity.getUserId());
+        }
     }
 }

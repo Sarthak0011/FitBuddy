@@ -31,15 +31,24 @@ public class ActivityAiServiceImpl implements ActivityAiService {
     }
 
     private Recommendation processAiResponse(ActivityEvent activity, String aiResponse) {
+        if (aiResponse == null || aiResponse.trim().isEmpty()) {
+            log.warn("Received empty or null response from AI service for activity {}", activity.getActivityId());
+            return null;
+        }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(aiResponse);
             JsonNode textNode = rootNode.path("candidates")
-                    .get(0)
+                    .path(0)
                     .path("content")
                     .path("parts")
-                    .get(0)
+                    .path(0)
                     .path("text");
+
+            if (textNode.isMissingNode() || textNode.asText().isEmpty()) {
+                log.warn("Gemini response is empty or invalid format: {}", aiResponse);
+                return null;
+            }
 
             String jsonContent = textNode.asText()
                     .replaceAll("```json\\n", "")
