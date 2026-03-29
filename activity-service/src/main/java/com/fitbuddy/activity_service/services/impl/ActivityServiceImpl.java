@@ -50,7 +50,7 @@ public class ActivityServiceImpl implements ActivityService {
             ActivityEvent event = ActivityEvent.builder()
                     .activityId(savedActivity.getId())
                     .userId(savedActivity.getUserId())
-                    .type(savedActivity.getType())
+                    .type(savedActivity.getType().toString())
                     .duration(savedActivity.getDuration())
                     .caloriesBurned(savedActivity.getCaloriesBurned())
                     .startTime(savedActivity.getStartTime())

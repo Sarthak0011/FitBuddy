@@ -28,3 +28,8 @@ eureka:
 kafka:
   topic:
     name: activity-events
+
+gemini:
+  api:
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent
+    key: AIzaSyDMMrwmAeoCo1pM6tS7KzSXi5kBX_1OY1A
